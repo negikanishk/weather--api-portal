@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>SkyNova | Global Weather Intelligence Center</title>
+    <meta name="description" content="NASA-level global climate monitoring and real-time weather analytics.">
+    <!-- Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Three.js for Global Visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- Background Grid & Effects -->
+    <div class="bg-orchestrator">
+        <div class="grid-overlay"></div>
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+        <div class="bg-blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i data-lucide="globe"></i> SkyNova <span class="badge">LIVE</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Monitoring</a></li>
+            <li><a href="#global-live">Global Network</a></li>
+            <li><a href="#rankings">Analytics</a></li>
+        </ul>
+        <div class="nav-actions">
+            <div id="live-clock" class="digital-clock">00:00:00 UTC</div>
+        </div>
+    </nav>
+
+    <!-- Hero / Main Monitoring Section -->
+    <section class="hero" id="hero">
+        <div class="monitoring-status">
+            <span class="pulse"></span> System Status: Operational | Satellites: Active
+        </div>
+        
+        <h1 class="hero-title">Global Climate <br><span id="typing-text">Intelligence</span></h1>
+        
+        <div class="search-container">
+            <input type="text" id="city-input" class="search-input" placeholder="Enter Global Coordinates (City Name)...">
+            <i data-lucide="search" class="search-icon" id="search-btn"></i>
+        </div>
+
+        <button class="btn-location" id="location-btn">
+            <i data-lucide="crosshair"></i> Sync Current Coordinates
+        </button>
+
+        <!-- Animated Globe Container -->
+        <div id="globe-container" class="globe-container"></div>
+    </section>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard" id="dashboard">
+        <!-- Main Terminal -->
+        <div class="glass-card main-weather-card" id="current-weather">
+            <div class="card-header">
+                <span id="date-time">May 13, 12:24 PM</span>
+                <span class="scan-line"></span>
+            </div>
+            <h2 id="city-name" class="city-title">INITIALIZING...</h2>
+            <div class="weather-main-display">
+                <div class="weather-icon-large" id="weather-icon"></div>
+                <div class="temp-large" id="temp-display">--°</div>
+            </div>
+            <div class="weather-condition" id="condition-text">Connecting to Satellite...</div>
+            <div class="weather-meta" id="high-low">H: --° | L: --° | AQI: --</div>
+        </div>
+
+        <!-- Metric Grid -->
+        <div class="details-grid">
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="droplets"></i> Humidity</span>
+                <span class="detail-value" id="humidity">--%</span>
+                <div class="progress-bar"><div id="humidity-bar" class="progress-fill"></div></div>
+            </div>
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="wind"></i> Wind Vector</span>
+                <span class="detail-value" id="wind">-- km/h</span>
+                <div class="wind-direction" id="wind-dir">↑</div>
+            </div>
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="thermometer"></i> Thermal Index</span>
+                <span class="detail-value" id="feels-like">--°</span>
+            </div>
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="gauge"></i> Pressure</span>
+                <span class="detail-value" id="pressure">-- hPa</span>
+            </div>
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="sun"></i> UV Radiation</span>
+                <span class="detail-value" id="uv-index">--</span>
+            </div>
+            <div class="glass-card detail-item">
+                <span class="detail-label"><i data-lucide="eye"></i> Visibility</span>
+                <span class="detail-value" id="visibility">-- km</span>
+            </div>
+        </div>
+
+        <!-- Global Weather Live Section -->
+        <div class="section-container" id="global-live">
+            <h3 class="section-title"><i data-lucide="radio"></i> Global Network Live</h3>
+            <div class="global-cities-grid" id="global-cities">
+                <!-- City cards like Delhi, Tokyo, NY will be injected here -->
+            </div>
+        </div>
+
+        <!-- Analytics & Rankings -->
+        <div class="rankings-container" id="rankings">
+            <div class="glass-card ranking-card">
+                <h3><i data-lucide="flame"></i> Extreme Thermal Zones</h3>
+                <ul id="hot-cities-list"></ul>
+            </div>
+            <div class="glass-card ranking-card">
+                <h3><i data-lucide="wind"></i> Global AQI Analysis</h3>
+                <ul id="aqi-cities-list"></ul>
+            </div>
+        </div>
+
+        <!-- Forecast Visualization -->
+        <h3 class="section-title"><i data-lucide="bar-chart-3"></i> 7-Day Predictive Analysis</h3>
+        <div class="weekly-forecast" id="weekly-forecast"></div>
+
+        <h3 class="section-title"><i data-lucide="activity"></i> Atmospheric Trend Map</h3>
+        <div class="glass-card chart-container">
+            <canvas id="temp-chart"></canvas>
+        </div>
+    </main>
+
+    <!-- Error Interface -->
+    <div id="error-toast" class="error-panel">
+        <i data-lucide="alert-triangle"></i>
+        <span id="error-message">Signal Interrupted.</span>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo"><i data-lucide="globe"></i> SkyNova</div>
+            <p>Interconnected Climate Intelligence Network &copy; 2026</p>
+            <div class="social-links">
+                <i data-lucide="github"></i>
+                <i data-lucide="twitter"></i>
+                <i data-lucide="linkedin"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
